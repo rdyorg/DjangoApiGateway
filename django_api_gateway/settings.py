@@ -25,6 +25,8 @@ INSTALLED_APPS = [
 
     'rest_framework',  # drf
     'corsheaders',  # 解决跨域请求
+
+    'gateway',
 ]
 
 MIDDLEWARE = [

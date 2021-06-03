@@ -25,7 +25,7 @@ class Service(BaseModel):
         managed = True
         db_table = 'gateway_service'
         verbose_name = '服务'
-        ordering = "-id"
+        ordering = ["-id"]
 
     def __str__(self):
         return self.name
@@ -38,13 +38,13 @@ class Api(BaseModel):
         ("GET", "GET"),
         ("POST", "POST"),
     )
-    method = models.CharField("方法", max_length=4, choices=METHOD, default="GET", blank=True)
+    method = models.CharField("方法", max_length=5, choices=METHOD, default="GET", blank=True)
     PROTOCOL = (
         ("HTTP", "HTTP"),
         ("HTTPS", "HTTPS"),
     )
-    protocol = models.CharField("协议", max_length=4, choices=PROTOCOL, default="HTTP", blank=True)
-    path = models.CharField("api路径", max_length=300, default="/", blank=True)
+    protocol = models.CharField("协议", max_length=5, choices=PROTOCOL, default="HTTP", blank=True)
+    path = models.CharField("api路径", max_length=300, default="/", blank=True, help_text="必须以/开头")
     timeout = models.IntegerField("超时时间(ms)", default=1000, blank=True)
     involve = models.TextField("入参", blank=True, default="")
     existence = models.TextField("出参", blank=True, default="")
@@ -53,7 +53,7 @@ class Api(BaseModel):
         managed = True
         db_table = 'gateway_api'
         verbose_name = '接口'
-        ordering = "-id"
+        ordering = ["-id"]
 
     def __str__(self):
         return self.name
@@ -84,7 +84,7 @@ class Step(BaseModel):
         managed = True
         db_table = 'gateway_step'
         verbose_name = '步骤'
-        ordering = "-id"
+        ordering = ["-id"]
 
     def __str__(self):
         return self.name
@@ -100,7 +100,7 @@ class StepApi(models.Model):
         managed = True
         db_table = 'gateway_step_api'
         verbose_name = '步骤接口表'
-        ordering = "-id"
+        ordering = ["-id"]
 
 
 class Arrangement(BaseModel):
@@ -109,7 +109,7 @@ class Arrangement(BaseModel):
         ("GET", "GET"),
         ("POST", "POST"),
     )
-    method = models.CharField("方法", max_length=4, choices=METHOD, default="GET", blank=True)
+    method = models.CharField("方法", max_length=5, choices=METHOD, default="GET", blank=True)
     path = models.CharField("api路径", max_length=300, default="/", blank=True)
     desc = models.CharField("描述", max_length=400, default="", blank=True)
 
@@ -117,7 +117,7 @@ class Arrangement(BaseModel):
         managed = True
         db_table = 'gateway_arrangement'
         verbose_name = '编排'
-        ordering = "-id"
+        ordering = ["-id"]
 
     def __str__(self):
         return self.name
@@ -130,7 +130,7 @@ class Gateway(BaseModel):
         managed = True
         db_table = 'gateway_gateway'
         verbose_name = '网关'
-        ordering = "-id"
+        ordering = ["-id"]
 
     def __str__(self):
         return self.name
@@ -142,7 +142,7 @@ class Router(BaseModel):
         ("GET", "GET"),
         ("POST", "POST"),
     )
-    method = models.CharField("方法", max_length=4, choices=METHOD, default="GET", blank=True)
+    method = models.CharField("方法", max_length=5 , choices=METHOD, default="GET", blank=True)
     step = models.ForeignKey(Step, on_delete=models.DO_NOTHING, related_name="router_step", verbose_name="步骤",
                              blank=True, null=True)
     api = models.ForeignKey(Api, on_delete=models.DO_NOTHING, related_name="router_api", verbose_name="接口", blank=True,
@@ -152,7 +152,7 @@ class Router(BaseModel):
         managed = True
         db_table = 'gateway_router'
         verbose_name = '编排'
-        ordering = "-id"
+        ordering = ["-id"]
 
     def __str__(self):
         return self.name
