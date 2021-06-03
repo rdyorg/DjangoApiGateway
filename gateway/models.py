@@ -105,6 +105,7 @@ class StepApi(models.Model):
 
 class Arrangement(BaseModel):
     name = models.CharField("名称", max_length=100)
+    step = models.ForeignKey(Step, on_delete=models.CASCADE, related_name="arrangement_step", verbose_name="步骤", null=True)
     METHOD = (
         ("GET", "GET"),
         ("POST", "POST"),
@@ -138,20 +139,23 @@ class Gateway(BaseModel):
 
 class Router(BaseModel):
     name = models.CharField("名称", max_length=100)
+    gateway = models.ForeignKey(Gateway, on_delete=models.DO_NOTHING, related_name="router_gateway", verbose_name="网关",
+                                null=True)
     METHOD = (
         ("GET", "GET"),
         ("POST", "POST"),
     )
-    method = models.CharField("方法", max_length=5 , choices=METHOD, default="GET", blank=True)
+    method = models.CharField("方法", max_length=5, choices=METHOD, default="GET", blank=True)
+    path = models.CharField("api路径", max_length=300, default="/", blank=True)
     step = models.ForeignKey(Step, on_delete=models.DO_NOTHING, related_name="router_step", verbose_name="步骤",
                              blank=True, null=True)
-    api = models.ForeignKey(Api, on_delete=models.DO_NOTHING, related_name="router_api", verbose_name="接口", blank=True,
-                            null=True)
+    api = models.ForeignKey(Api, on_delete=models.DO_NOTHING, related_name="router_api", verbose_name="接口",
+                            blank=True, null=True)
 
     class Meta:
         managed = True
         db_table = 'gateway_router'
-        verbose_name = '编排'
+        verbose_name = '路由'
         ordering = ["-id"]
 
     def __str__(self):
