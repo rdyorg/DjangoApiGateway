@@ -7,6 +7,9 @@ class BaseModel(models.Model):
     create_time = models.DateTimeField("创建时间", auto_now_add=True, editable=False, db_index=True)
     update_time = models.DateTimeField("修改时间", auto_now=True, editable=False, db_index=True)
 
+    class Meta:
+        abstract = True
+
 
 class Service(BaseModel):
     name = models.CharField("名称", max_length=100)
@@ -93,6 +96,12 @@ class StepApi(models.Model):
     involve = models.TextField("入参", blank=True, default="")
     existence = models.TextField("出参", blank=True, default="")
 
+    class Meta:
+        managed = True
+        db_table = 'gateway_step_api'
+        verbose_name = '步骤接口表'
+        ordering = "-id"
+
 
 class Arrangement(BaseModel):
     name = models.CharField("名称", max_length=100)
@@ -108,6 +117,19 @@ class Arrangement(BaseModel):
         managed = True
         db_table = 'gateway_arrangement'
         verbose_name = '编排'
+        ordering = "-id"
+
+    def __str__(self):
+        return self.name
+
+
+class Gateway(BaseModel):
+    name = models.CharField("名称", max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'gateway_gateway'
+        verbose_name = '网关'
         ordering = "-id"
 
     def __str__(self):
