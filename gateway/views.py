@@ -13,15 +13,21 @@ def router_page(request, path='/'):
     router_instance = Router.objects.select_related(
         "arrangement").select_related("api__server").get(path="/" + path)
     # 获取关联数据对象
-    api_instance = router_instance.api
-    arrangement_instance = router_instance.arrangement
-    service_instance = router_instance.api.server
-    if api_instance:
+    if router_instance.api:
+        api_instance = router_instance.api
+        service_instance = router_instance.api.server
         to_url = api_instance.protocol + "://" + service_instance.instances + api_instance.path
         res_data = methodcaller(api_instance.method.lower(), url=to_url)(requests).json()
-    if arrangement_instance:
+    if router_instance.arrangement:
+        arrangement_instance = router_instance.arrangement
         # 获取当前编排下的所有步骤数据
-        step_queryset = Step.objects.select_related("api__server").filter(arrangement=arrangement_instance)
+        res_data = []
+        step_queryset = Step.objects.prefetch_related(
+            "api__server"
+        ).filter(arrangement=arrangement_instance)
         for step_instance in step_queryset:
-            pass
+            api_instance = step_instance.api
+            service_instance = step_instance.api.server
+            to_url = api_instance.protocol + "://" + service_instance.instances + api_instance.path
+            res_data.append(methodcaller(api_instance.method.lower(), url=to_url)(requests).json())
     return JsonResponse({"data": res_data})
