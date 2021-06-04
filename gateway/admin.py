@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gateway.models import Api, Service, Step, Arrangement, Router, Gateway
+from gateway.models import Api, Server, Step, Arrangement, Router, Gateway, StepApi
 
 
 # Register your models here.
@@ -10,13 +10,18 @@ class ApiAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
+@admin.register(Server)
+class ServerAdmin(admin.ModelAdmin):
     pass
 
 
 @admin.register(Step)
 class StepAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(StepApi)
+class StepApiAdmin(admin.ModelAdmin):
     pass
 
 

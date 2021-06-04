@@ -110,7 +110,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     # 处理对象时间格式
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
-    'DEFAULT_PAGINATION_CLASS': 'changning_w.page_pagination.PaginationResponse',
+    # 'DEFAULT_PAGINATION_CLASS': 'changning_w.page_pagination.PaginationResponse',
 
     # 允许的请求数据格式
     'DEFAULT_PARSER_CLASSES': [

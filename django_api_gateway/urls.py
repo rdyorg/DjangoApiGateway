@@ -1,8 +1,12 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.conf.urls import include, url
+from gateway import views
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^{}(\d+)/$'.format(settings.PROXY_PATH), views.router_page),
 ]
 
 from django.conf import settings
