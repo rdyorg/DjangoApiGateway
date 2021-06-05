@@ -81,7 +81,6 @@ class Step(BaseModel):
     每个步骤下的所有api异步执行，步骤之间同步执行
     """
     name = models.CharField("名称", max_length=100)
-    api = models.ManyToManyField(Api, through="StepApi")
     arrangement = models.ForeignKey("Arrangement", on_delete=models.CASCADE, related_name="step_arrangement",
                                     verbose_name="编排", null=True)
     sort = models.IntegerField("顺序", blank=True, default=1)
