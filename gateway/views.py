@@ -31,7 +31,7 @@ def router_page(request, path='/'):
             res_data = []
             for step_api_instance in step_instance.step_api_cache:
                 resp = get_request(step_api_instance)
-                res_data.append(resp.json())
+                res_data.append(resp)
     return JsonResponse({"data": res_data})
 
 
@@ -56,4 +56,21 @@ def get_request(instance):
     )(requests)
     if resp.status_code != 200:
         return
+    # 根据配置的出参获取对应的值
+    existence = json.loads(api_instance.existence)
+    # 获取所有的需要组装的参数
+    data_list = []
+    for i in existence.get("data", []):
+        data_list.append(i["key"])
+    """
+    {
+    "headers": {},
+    "data": {
+    	[{"name": "统计信息", "key": "count"}]
+    	[{"name": "详情地址信息", "key": "data.address"}]
+    },
+    "script": {}
+    }
+    """
+    resp = resp.json()
     return resp
