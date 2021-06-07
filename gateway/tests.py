@@ -1,58 +1,12 @@
-import httpx
-import asyncio
+import grequests
 import time
 
-async def request(client):
-    resp = await client.get('http://39.103.236.234:10001/async/')
-    print(resp)
-
-
-async def main():
-    async with httpx.AsyncClient() as client:
-        # # 开始
-        # start = time.time()
-
-        # 1000 次调用
-        task_list = []
-        for _ in range(40):
-            req = request(client)
-            task = asyncio.get_event_loop().create_task(req)
-            task_list.append(task)
-        await asyncio.gather(*task_list)
-
-
-
-if __name__ == "__main__":
-    #开始
-    start = time.time()
-    asyncio.get_event_loop().run_until_complete(main())
-    # 结束
-    end = time.time()
-    print(f'异步：发送1000次请求，耗时：{end - start}')
-
-
-# 同步调用
-# import time
-# import httpx
-#
-#
-# def make_request(client):
-#     resp = client.get('http://39.103.236.234:10001/async/')
-#     print(resp)
-#
-#
-# def main():
-#     session = httpx.Client()
-#
-#     # 1000 次调用
-#     for _ in range(40):
-#         make_request(session)
-#
-#
-# if __name__ == '__main__':
-#     # 开始
-#     start = time.time()
-#     main()
-#     # 结束
-#     end = time.time()
-#     print(f'同步：发送1000次请求，耗时：{end - start}')
+urls = [
+    'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0',
+    'https://envprotection.chinadigitalcity.com/service/dust_monitoring/',
+]
+start_time = time.time()
+rs = (grequests.get(u) for u in urls)
+res = grequests.map(rs)
+print(res)
+print(time.time() - start_time)

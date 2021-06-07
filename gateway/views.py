@@ -1,13 +1,17 @@
+import asyncio
 import json
 
+import httpx
+from asgiref.sync import sync_to_async
 from django.db.models import Prefetch
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 import logging
 from gateway.models import Router, Step, StepApi
 import requests
 from operator import methodcaller
 import grequests
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -17,10 +21,38 @@ async def test(request):
         'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0',
         'https://envprotection.chinadigitalcity.com/service/dust_monitoring/',
     ]
+    start_time = time.time()
     rs = (grequests.get(u) for u in urls)
+    print(time.time() - start_time)
     res = grequests.map(rs)
     print(res)
+    get_blog = sync_to_async(_get_router_queryset, thread_sensitive=True)
+    print(get_blog)
+    print("11")
+    print(time.time() - start_time)
     return JsonResponse({"data": ""})
+
+
+# 异步任务
+async def http_call_async():
+    async with httpx.AsyncClient() as client:
+        r = await client.get(
+            'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0')
+        print(r)
+        # r = await client.get(
+        #     'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0')
+        # print(r)
+
+
+# 异步视图 - 调用异步任务
+async def async_view(request):
+    loop = asyncio.get_event_loop()
+    loop.create_task(http_call_async())
+    return HttpResponse("Non-blocking HTTP request")
+
+
+def _get_router_queryset():
+    return Router.objects.all()
 
 
 def router_page(request, path='/'):
