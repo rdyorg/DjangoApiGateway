@@ -7,8 +7,20 @@ import logging
 from gateway.models import Router, Step, StepApi
 import requests
 from operator import methodcaller
+import grequests
 
 logger = logging.getLogger(__name__)
+
+
+async def test(request):
+    urls = [
+        'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0',
+        'https://envprotection.chinadigitalcity.com/service/dust_monitoring/',
+    ]
+    rs = (grequests.get(u) for u in urls)
+    res = grequests.map(rs)
+    print(res)
+    return JsonResponse({"data": ""})
 
 
 def router_page(request, path='/'):
