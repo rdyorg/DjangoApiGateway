@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^{}(\d+)/$'.format(settings.PROXY_PATH), views.router_page),
     url(r'test/'.format(settings.PROXY_PATH), views.test),
     url(r'aaa/'.format(settings.PROXY_PATH), views.async_view),
+    url(r'ccc/'.format(settings.PROXY_PATH), views.async_home),
 ]
 
 from django.conf import settings

@@ -1,5 +1,9 @@
+import asyncio
+
 import grequests
 import time
+
+import httpx
 
 urls = [
     'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0',
@@ -10,3 +14,7 @@ rs = (grequests.get(u) for u in urls)
 res = grequests.map(rs)
 print(res)
 print(time.time() - start_time)
+
+
+
+)

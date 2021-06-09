@@ -2,7 +2,7 @@ import asyncio
 import json
 
 import httpx
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 from django.db.models import Prefetch
 from django.http import JsonResponse, HttpResponse
 
@@ -15,22 +15,51 @@ import time
 
 logger = logging.getLogger(__name__)
 
+urls = [
+    'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0',
+    'https://envprotection.chinadigitalcity.com/service/dust_monitoring/',
+]
 
-async def test(request):
+
+def test(request):
     urls = [
         'https://envprotection.chinadigitalcity.com/service/dust_monitoring/?type=%E5%B7%A5%E5%9C%B0',
         'https://envprotection.chinadigitalcity.com/service/dust_monitoring/',
     ]
     start_time = time.time()
-    rs = (grequests.get(u) for u in urls)
+    rs = [grequests.get(urls[0], callback="get_resp")]
     print(time.time() - start_time)
-    res = grequests.map(rs)
+    print(rs)
+    res = async_to_sync(grequests.map(rs))
     print(res)
-    get_blog = sync_to_async(_get_router_queryset, thread_sensitive=True)
-    print(get_blog)
-    print("11")
+    # get_blog = sync_to_async(_get_router_queryset, thread_sensitive=True)
+    # print(get_blog)
     print(time.time() - start_time)
     return JsonResponse({"data": ""})
+
+
+def get_resp(r, *args, **kwargs):
+    print("2222")
+    print(r)
+
+
+# 异步升级版
+async def async_home(request):
+    """Display homepage by calling two services asynchronously (proper concurrency)"""
+    context = {}
+    try:
+        async with httpx.AsyncClient() as client:
+            # 使用asyncio.gather 并发执行协程
+            response_p, response_r = await asyncio.gather(client.get(urls[0]), client.get(urls[1]))
+            print(response_p)
+            print(response_r)
+            if response_p.status_code == httpx.codes.OK:
+                context["promo"] = response_p.json()
+            if response_r.status_code == httpx.codes.OK:
+                context["recco"] = response_r.json()
+    except httpx.RequestError as exc:
+        print(f"An error occurred while requesting {exc.request.url!r}.")
+    return HttpResponse(context)
 
 
 # 异步任务
