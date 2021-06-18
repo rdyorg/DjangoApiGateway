@@ -7,9 +7,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^{}(\d+)/$'.format(settings.PROXY_PATH), views.router_page),
-    url(r'^{}(\d+)/$'.format(settings.TEST_PROXY_PATH), views.async_router_page),
-    url(r'bbb/', views.main),
-    url(r'ccc/', views.sync_main),
 ]
 
 from django.conf import settings
