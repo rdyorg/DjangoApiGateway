@@ -49,8 +49,8 @@ class Api(BaseModel):
     protocol = models.CharField("协议", max_length=5, choices=PROTOCOL, default="HTTP", blank=True)
     path = models.CharField("api路径", max_length=300, default="/", blank=True, help_text="必须以/开头", db_index=True)
     timeout = models.IntegerField("超时时间(ms)", default=1000, blank=True)
-    involve = models.TextField("入参", blank=True, default="")
-    existence = models.TextField("出参", blank=True, default="")
+    involve = models.TextField("入参", blank=True, default='{"headers":{},"args":{},"data":{},"script":{}}')
+    existence = models.TextField("出参", blank=True, default='{"headers":{},"args":{},"data":{},"script":{}}')
 
     class Meta:
         managed = True

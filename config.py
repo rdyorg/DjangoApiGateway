@@ -14,3 +14,4 @@ REDIS_PASSWORD = "123456"
 REDIS_DB = 1
 # URL代理地址
 PROXY_PATH = "proxy/"
+TEST_PROXY_PATH = "_proxy/"

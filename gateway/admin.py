@@ -2,9 +2,6 @@ from django.contrib import admin
 from gateway.models import Api, Server, Step, Arrangement, Router, Gateway, StepApi
 
 
-# Register your models here.
-
-
 @admin.register(Api)
 class ApiAdmin(admin.ModelAdmin):
     pass

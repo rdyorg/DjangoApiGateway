@@ -13,9 +13,10 @@ from config import *
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 INSTALLED_APPS = [
-    'simpleui',
+    # 'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -100,7 +101,15 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# 静态文件
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    "./static/",
+]
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# 文件存储配置
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 默认根目录
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
