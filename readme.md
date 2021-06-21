@@ -30,6 +30,17 @@
 
 5.插件，作用在网关上的，对当前网关下的所有服务，对当前网关下的所有服务都有效
 
+### 重中之重
+
+> 当前市面上的所有的api网关，如果有聚合服务，在对响应体进行聚合时，都是通过.操作进行配置，操作起来不方便
+
+* 解决方案
+    * 采用可视化配置，对接口使用预请求，将响应体进行中文描述配置
+    * 把多个接口的响应体进行简单json组装，加上唯一标识信息
+    * 通过树形组件，对响应体进行结构重组
+    * 通过添加函数组织，对响应体的内容进行二次操作，比如：sum(), max(), min(), count(), len(), list() => 将当前对象下的某个属性单独抽离为另外一个类型为列表的数据
+
+
 ![Readme](https://github.com/RYD-Gateway/DjangoApiGateway/blob/master/images/微信图片_20210602231736.png)
 
 ![Readme](https://github.com/RYD-Gateway/DjangoApiGateway/blob/master/images/微信截图_20210618191053.png)
