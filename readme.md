@@ -14,7 +14,7 @@
 
 * 修改根目录下的config.py文件内的参数信息
 
-* 启动脚本：uvicorn django_api_gateway.asgi:application --reload --host 0.0.0.0 --port 10001
+* 启动脚本：**uvicorn django_api_gateway.asgi:application --reload --host 0.0.0.0 --port 10001**
 
 ### 设计说明
 
@@ -34,11 +34,16 @@
 
 > 当前市面上的所有的api网关，如果有聚合服务，在对响应体进行聚合时，都是通过.操作进行配置，操作起来不方便
 
+* 说明
+    * 此方案对数据结构操作比较多，需要考虑到数据的操作的复杂性，空间和时间
+
 * 解决方案
-    * 采用可视化配置，对接口使用预请求，将响应体进行中文描述配置
+    * 采用可视化配置，对接口使用预请求，将响应体进行中文描述配置[一个api接口文档的业务]
     * 把多个接口的响应体进行简单json组装，加上唯一标识信息
     * 通过树形组件，对响应体进行结构重组
-    * 通过添加函数组织，对响应体的内容进行二次操作，比如：sum(), max(), min(), count(), len(), list() => 将当前对象下的某个属性单独抽离为另外一个类型为列表的数据
+    * 通过添加函数组织，对响应体的内容进行二次操作，比如：
+        * sum(data.age), max(data.age), min(), count(), len()
+        * list(data.name) => 将当前对象下的某个属性单独抽离为另外一个类型为列表的数据
 
 
 ![Readme](https://github.com/RYD-Gateway/DjangoApiGateway/blob/master/images/微信图片_20210602231736.png)
