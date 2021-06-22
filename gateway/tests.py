@@ -24,9 +24,33 @@ a = {
                 ]
             },
             "class": [
-                {"name": "张", "num": "101"},
-                {"name": "张", "num": "101"},
-                {"name": "张", "num": "101"}
+                {
+                    "name": "张",
+                    "num": "101",
+                    "stu_list": [
+                        {"name": "我问问", "age": 30},
+                        {"name": "我问问", "age": 30},
+                        {"name": "我问问", "age": 30}
+                    ]
+                },
+                {
+                    "name": "张",
+                    "num": "101",
+                    "stu_list": [
+                        {"name": "我问问", "age": 30},
+                        {"name": "我问问", "age": 30},
+                        {"name": "我问问", "age": 30}
+                    ]
+                },
+                {
+                    "name": "张",
+                    "num": "101",
+                    "stu_list": [
+                        {"name": "我问问", "age": 30},
+                        {"name": "我问问", "age": 30},
+                        {"name": "我问问", "age": 30}
+                    ]
+                }
             ],
             "total": 4
         },
@@ -65,31 +89,42 @@ def easy_resp(a):
     return a
 
 
+
 # 组装结果
-def format_resp(parent_key, index, a):
+def format_resp(parent_key, index, a, filed_list):
     res = []
     for key, i in a.items():
         filed = (parent_key + "||" + key) if parent_key else key
+        field_type = "str"
+        if isinstance(i, dict):
+            field_type = "dict"
+        elif isinstance(i, list):
+            field_type = "list"
+            filed_list[filed] = len(i)
         now_res = dict(
             id=index,
             label=key,
-            filed=filed
+            filed=filed,
+            field_type=field_type
         )
         index += 1
         if isinstance(i, dict):
-            index, now_res["children"] = format_resp(filed, index, i)
+            index, now_res["children"], filed_list = format_resp(filed, index, i, filed_list)
         if isinstance(i, list):
             if len(i):
-                index, now_res["children"] = format_resp(filed, index, i[0])
+                index, now_res["children"], filed_list = format_resp(filed, index, i[0], filed_list)
         res.append(now_res)
-    return index, res
+    return index, res, filed_list
 
 
 def main(a):
-    c = easy_resp(a)
-    print(c)
-    print(format_resp("", 1, c)[1])
-    return format_resp("", 1, c)[1]
+    e = format_resp("", 1, a, {})
+    # c = easy_resp(a)
+    # print(c)
+    # d = format_resp("", 1, c, {})
+    # print(d[2])
+    print(e[2])
+    return ""
 
 
 res = [{"id": 1, "label": "step1.resp", "filed": "step1.resp",
@@ -148,7 +183,7 @@ def test(data_list, name):
 
 
 if __name__ == '__main__':
-    # print(main(a))
-    res = get_res_format()
-    data = get_res_resp(a, res)
-    print(data)
+    print(main(a))
+    # res = get_res_format()
+    # data = get_res_resp(a, res)
+    # print(data)
