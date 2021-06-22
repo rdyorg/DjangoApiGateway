@@ -1,3 +1,5 @@
+import copy
+
 a = {
     "step1.resp": {
         "data": {
@@ -21,6 +23,11 @@ a = {
                     }
                 ]
             },
+            "class": [
+                {"name": "张", "num": "101"},
+                {"name": "张", "num": "101"},
+                {"name": "张", "num": "101"}
+            ],
             "total": 4
         },
         "result": "success"
@@ -85,28 +92,26 @@ def main(a):
     return format_resp("", 1, c)[1]
 
 
-res = [
-    {"id": 1, "label": "step1.resp", "filed": "step1.resp", "children": [
-        {"id": 2, "label": "data", "filed": "step1.resp||data",
-         "children": [{"id": 7, "label": "total", "filed": "step1.resp||data||total"}]},
-        {"id": 8, "label": "result", "filed": "step1.resp||result"}]},
-    {"id": 9, "label": "step2.resp", "filed": "step2.resp", "children": [
-        {"id": 10, "label": "data", "filed": "step2.resp||data",
-         "children": [{"id": 11, "label": "numHits", "filed": "step2.resp||data||numHits"},
-                      {"id": 12, "label": "messages", "filed": "step2.resp||data||messages"},
-                      {"id": 13, "label": "aggResults", "filed": "step2.resp||data||aggResults", "children": []}]},
-        {"id": 17, "label": "result", "filed": "step2.resp||result"}]},
-    {"id": 0, "label": "res.resp", "filed": "res.resp", "children": [
-        {"id": 14, "label": "simple.messageType", "filed": "step2.resp||data||aggResults||simple.messageType",
-         "children": [
-             {"id": 15, "label": "count", "filed": "step2.resp||data||aggResults||simple.messageType||count"},
-             {"id": 16, "label": "messageType",
-              "filed": "step2.resp||data||aggResults||simple.messageType||messageType"}]},
-        {"id": 3, "label": "aggResults", "filed": "step1.resp||data||aggResults", "children": [
-            {"id": 4, "label": "openTS.day", "filed": "step1.resp||data||aggResults||openTS.day",
-             "children": [{"id": 5, "label": "count", "filed": "step1.resp||data||aggResults||openTS.day||count"},
-                          {"id": 6, "label": "time_fm",
-                           "filed": "step1.resp||data||aggResults||openTS.day||time_fm"}]}]}]}]
+res = [{"id": 1, "label": "step1.resp", "filed": "step1.resp",
+        "children": [{"id": 8, "label": "result", "filed": "step1.resp||result"},
+                     {"id": 6, "label": "time_fm", "filed": "step1.resp||data||aggResults||openTS.day||time_fm"},
+                     {"id": 7, "label": "total", "filed": "step1.resp||data||total"}]},
+       {"id": 9, "label": "step2.resp", "filed": "step2.resp", "children": [
+           {"id": 10, "label": "data", "filed": "step2.resp||data",
+            "children": [{"id": 11, "label": "numHits", "filed": "step2.resp||data||numHits"},
+                         {"id": 12, "label": "messages", "filed": "step2.resp||data||messages"},
+                         {"id": 13, "label": "aggResults", "filed": "step2.resp||data||aggResults", "children": []}]},
+           {"id": 17, "label": "result", "filed": "step2.resp||result"}]},
+       {"id": 0, "label": "res.resp", "filed": "res.resp", "children": [
+           {"id": 2, "label": "data", "filed": "step1.resp||data", "children": [
+               {"id": 14, "label": "simple.messageType", "filed": "step2.resp||data||aggResults||simple.messageType",
+                "children": [
+                    {"id": 15, "label": "count", "filed": "step2.resp||data||aggResults||simple.messageType||count"},
+                    {"id": 16, "label": "messageType",
+                     "filed": "step2.resp||data||aggResults||simple.messageType||messageType"}]},
+               {"id": 3, "label": "aggResults", "filed": "step1.resp||data||aggResults", "children": [
+                   {"id": 4, "label": "openTS.day", "filed": "step1.resp||data||aggResults||openTS.day", "children": [
+                       {"id": 5, "label": "count", "filed": "step1.resp||data||aggResults||openTS.day||count"}]}]}]}]}]
 
 
 def get_res_format():
@@ -118,20 +123,32 @@ def get_res_format():
     return res_resp
 
 
-def get_res_resp(result, a, res_resp):
+def get_res_resp(a, res_resp):
+    result = {}
     for item in res_resp:
         if item.get("children"):
             result[item["label"]] = get_res_resp(a, item["children"])
         fields = item["filed"].split("||")
+        new_a = copy.deepcopy(a)
         for i in fields:
-            print(a)
-            a = a.get(i)
-        result[fields[-1]] = a
+            if isinstance(new_a, list):
+                new_a = test(new_a, i)
+                continue
+            new_a = new_a.get(i)
+        result[fields[-1]] = new_a
     return result
 
 
+def get_list_obj():
+    pass
+
+
+def test(data_list, name):
+    return [{name: i.get(name)} for i in data_list]
+
+
 if __name__ == '__main__':
-    print(main(a))
+    # print(main(a))
     res = get_res_format()
     data = get_res_resp(a, res)
     print(data)
