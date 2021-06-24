@@ -121,5 +121,20 @@ def main(a):
     return ""
 
 
+
+def get_ee(format_data):
+    res = {}
+    for i in format_data:
+        # 当前只是结构，不是值
+        if i["field_type"] in ["list", "dict"]:
+            res[i["label"]] = get_ee(i["children"])
+    return res
+
+
+print(get_ee(format_data))
+a = "data.data.aggResults.simple_messageType[*].{new_count: count}"
+print(jmespath.search(a, old_data))
+
+
 if __name__ == '__main__':
     print(main(a))
