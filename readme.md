@@ -26,10 +26,16 @@
 * 解决方案
     * 采用可视化配置，对接口使用预请求，将响应体进行中文描述配置[一个api接口文档的业务]
     * 把多个接口的响应体进行简单json组装，加上唯一标识信息
-    * 通过树形组件，对响应体进行结构重组
+    * 通过树形组件，对响应体进行结构重组，可以对树形结构进行操作
     * 通过添加函数组织，对响应体的内容进行二次操作，比如：
         * sum(data.age), max(data.age), min(), count(), len()
         * list(data.name) => 将当前对象下的某个属性单独抽离为另外一个类型为列表的数据
+
+> 引用
+
+* jmespath 【根据一定格式处理json数据】
+
+链接：https://github.com/jmespath/jmespath.py
 
 ![Readme](https://github.com/RYD-Gateway/DjangoApiGateway/blob/master/images/微信图片_20210624164733.png)
 
