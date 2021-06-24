@@ -70,11 +70,7 @@ def router_page(request, path='/'):
         for step_instance in step_queryset:
             url_list = get_req_url_list(step_instance.step_api_cache)
             res_data.append(
-                dict(
-                    id=step_instance.id,
-                    name=step_instance.name,
-                    data=get_request(url_list)
-                )
+                {step_instance.id: get_request(url_list)}
             )
     return JsonResponse({"data": res_data})
 
